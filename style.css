@@ -1,0 +1,17 @@
+
+#background{
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+#content{
+  padding: 16px;
+}
+body{
+  background-color: rgb(4, 75, 99);
+  margin: 0;
+}
+#canvas{
+  border: solid 10px yellowgreen;
+}
