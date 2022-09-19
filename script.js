@@ -15,6 +15,69 @@ document.addEventListener("DOMContentLoaded", function () {
   drawMap();
   drawGrid();
 });
+// ===============================================
+canvas.addEventListener("mousedown", function (e) {
+  let beePosition = findBee();
+  let beeMoves = findMoves(beePosition.x, beePosition.y);
+  beeMoves.forEach((beeMove) => {
+    context.fillStyle = "#ff0000";
+    context.fillRect(square * beeMove.x, square * beeMove.y, square, square);
+  });
+
+  let flowersPositions = findFlowers();
+  flowersPositions.forEach((flowerPosition) => {
+    let flowersMoves = findMoves(flowerPosition.x, flowerPosition.y);
+    flowersMoves.forEach((flowerMove) => {
+      context.fillStyle = "#ffffff";
+      context.fillRect(
+        square * flowerMove.x,
+        square * flowerMove.y,
+        square,
+        square
+      );
+    });
+  });
+});
+// ===============================================
+function findMoves(x, y) {
+  let moves = [];
+  if (y > 0 && field[y - 1][x] != ROCK) {
+    moves.push({ x, y: y - 1 });
+  }
+  if (x + 1 < N && field[y][x + 1] != ROCK) {
+    moves.push({ x: x + 1, y: y });
+  }
+  if (y + 1 < N && field[y + 1][x] != ROCK) {
+    moves.push({ x, y: y + 1 });
+  }
+  if (x > 0 && field[y][x - 1] != ROCK) {
+    moves.push({ x: x - 1, y });
+  }
+
+  return moves;
+}
+//=================================================
+function findBee() {
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < N; x++) {
+      if (field[y][x] === BEE) {
+        return { x, y };
+      }
+    }
+  }
+}
+// ===============================================
+function findFlowers() {
+  let res = [];
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < N; x++) {
+      if (field[y][x] === FLOWER) {
+        res.push({ x: x, y: y });
+      }
+    }
+  }
+  return res;
+}
 // ================================================
 function generateMaze() {
   function placeFlower() {
@@ -47,7 +110,6 @@ function generateMaze() {
 }
 // ================================================
 function drawMap() {
-  context.beginPath();
   context.strokeStyle = "#ffffff";
   context.font = "30px serif";
   for (let y = 0; y < N; y++) {
@@ -72,7 +134,6 @@ function drawMap() {
           context.fillText("🌼", square * x + 5, square * y + 40);
           break;
       }
-      context.stroke();
     }
   }
 }
